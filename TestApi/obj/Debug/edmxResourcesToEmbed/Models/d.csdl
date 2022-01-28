@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="JuleTrainModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateBirth" Type="DateTime" Precision="0" />
+    <Property Name="Login" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="35" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastEnter" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ClientContract" Relationship="Self.FK_ClientContract_Client" FromRole="Client" ToRole="ClientContract" />
+  </EntityType>
+  <EntityType Name="ClientContract">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ClientId" Type="Int32" Nullable="false" />
+    <Property Name="ModemServiceId" Type="Int32" Nullable="false" />
+    <Property Name="ContarctId" Type="Int32" />
+    <NavigationProperty Name="Client" Relationship="Self.FK_ClientContract_Client" FromRole="ClientContract" ToRole="Client" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_ClientContract_Contract" FromRole="ClientContract" ToRole="Contract" />
+    <NavigationProperty Name="ModemService" Relationship="Self.FK_ClientContract_ModemService" FromRole="ClientContract" ToRole="ModemService" />
+  </EntityType>
+  <EntityType Name="Contract">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkerId" Type="Int32" Nullable="false" />
+    <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TotalPrice" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="IsExist" Type="Boolean" Nullable="false" />
+    <Property Name="TowerId" Type="Int32" />
+    <NavigationProperty Name="ClientContract" Relationship="Self.FK_ClientContract_Contract" FromRole="Contract" ToRole="ClientContract" />
+    <NavigationProperty Name="Tower" Relationship="Self.FK_Contract_Tower" FromRole="Contract" ToRole="Tower" />
+    <NavigationProperty Name="Worker" Relationship="Self.FK_Contract_Worker" FromRole="Contract" ToRole="Worker" />
+    <NavigationProperty Name="Payment" Relationship="Self.FK_Payment_Contract" FromRole="Contract" ToRole="Payment" />
+  </EntityType>
+  <EntityType Name="Modem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="TypeId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Type" Relationship="Self.FK_Modem_Type" FromRole="Modem" ToRole="Type" />
+    <NavigationProperty Name="ModemService" Relationship="Self.FK_ModemService_Modem" FromRole="Modem" ToRole="ModemService" />
+  </EntityType>
+  <EntityType Name="ModemService">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ModemId" Type="Int32" Nullable="false" />
+    <Property Name="ServiceId" Type="Int32" Nullable="false" />
+    <Property Name="DateChanged" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ClientContract" Relationship="Self.FK_ClientContract_ModemService" FromRole="ModemService" ToRole="ClientContract" />
+    <NavigationProperty Name="Modem" Relationship="Self.FK_ModemService_Modem" FromRole="ModemService" ToRole="Modem" />
+    <NavigationProperty Name="Service" Relationship="Self.FK_ModemService_Service" FromRole="ModemService" ToRole="Service" />
+    <NavigationProperty Name="Status" Relationship="Self.FK_ModemService_Status" FromRole="ModemService" ToRole="Status" />
+  </EntityType>
+  <EntityType Name="Payment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContratctId" Type="Int32" />
+    <Property Name="IsPaid" Type="Boolean" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Payment_Contract" FromRole="Payment" ToRole="Contract" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Worker" Relationship="Self.FK_Worker_Role" FromRole="Role" ToRole="Worker" />
+  </EntityType>
+  <EntityType Name="Service">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <NavigationProperty Name="ModemService" Relationship="Self.FK_ModemService_Service" FromRole="Service" ToRole="ModemService" />
+    <NavigationProperty Name="Type" Relationship="Self.FK_Service_Type" FromRole="Service" ToRole="Type" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ModemService" Relationship="Self.FK_ModemService_Status" FromRole="Status" ToRole="ModemService" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Tower">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+    <Property Name="CoordinateX" Type="Int32" />
+    <Property Name="CoordinateY" Type="Int32" />
+    <Property Name="City" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Contract_Tower" FromRole="Tower" ToRole="Contract" />
+  </EntityType>
+  <EntityType Name="Type">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Modem" Relationship="Self.FK_Modem_Type" FromRole="Type" ToRole="Modem" />
+    <NavigationProperty Name="Service" Relationship="Self.FK_Service_Type" FromRole="Type" ToRole="Service" />
+  </EntityType>
+  <EntityType Name="Worker">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="35" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="35" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Login" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastEnter" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Email" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Contract" Relationship="Self.FK_Contract_Worker" FromRole="Worker" ToRole="Contract" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_Worker_Role" FromRole="Worker" ToRole="Role" />
+  </EntityType>
+  <Association Name="FK_ClientContract_Client">
+    <End Role="Client" Type="Self.Client" Multiplicity="1" />
+    <End Role="ClientContract" Type="Self.ClientContract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ClientContract">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientContract_Contract">
+    <End Role="Contract" Type="Self.Contract" Multiplicity="0..1" />
+    <End Role="ClientContract" Type="Self.ClientContract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contract">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ClientContract">
+        <PropertyRef Name="ContarctId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientContract_ModemService">
+    <End Role="ModemService" Type="Self.ModemService" Multiplicity="1" />
+    <End Role="ClientContract" Type="Self.ClientContract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModemService">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ClientContract">
+        <PropertyRef Name="ModemServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Contract_Tower">
+    <End Role="Tower" Type="Self.Tower" Multiplicity="0..1" />
+    <End Role="Contract" Type="Self.Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tower">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="TowerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Contract_Worker">
+    <End Role="Worker" Type="Self.Worker" Multiplicity="1" />
+    <End Role="Contract" Type="Self.Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Worker">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="WorkerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Payment_Contract">
+    <End Role="Contract" Type="Self.Contract" Multiplicity="0..1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contract">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="ContratctId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Modem_Type">
+    <End Role="Type" Type="Self.Type" Multiplicity="1" />
+    <End Role="Modem" Type="Self.Modem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Modem">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModemService_Modem">
+    <End Role="Modem" Type="Self.Modem" Multiplicity="1" />
+    <End Role="ModemService" Type="Self.ModemService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Modem">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ModemService">
+        <PropertyRef Name="ModemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModemService_Service">
+    <End Role="Service" Type="Self.Service" Multiplicity="1" />
+    <End Role="ModemService" Type="Self.ModemService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ModemService">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModemService_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="ModemService" Type="Self.ModemService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ModemService">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Worker_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="Worker" Type="Self.Worker" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Worker">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Service_Type">
+    <End Role="Type" Type="Self.Type" Multiplicity="1" />
+    <End Role="Service" Type="Self.Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="JuleTrainEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Client" EntityType="Self.Client" />
+    <EntitySet Name="ClientContract" EntityType="Self.ClientContract" />
+    <EntitySet Name="Contract" EntityType="Self.Contract" />
+    <EntitySet Name="Modem" EntityType="Self.Modem" />
+    <EntitySet Name="ModemService" EntityType="Self.ModemService" />
+    <EntitySet Name="Payment" EntityType="Self.Payment" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="Service" EntityType="Self.Service" />
+    <EntitySet Name="Status" EntityType="Self.Status" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Tower" EntityType="Self.Tower" />
+    <EntitySet Name="Type" EntityType="Self.Type" />
+    <EntitySet Name="Worker" EntityType="Self.Worker" />
+    <AssociationSet Name="FK_ClientContract_Client" Association="Self.FK_ClientContract_Client">
+      <End Role="Client" EntitySet="Client" />
+      <End Role="ClientContract" EntitySet="ClientContract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientContract_Contract" Association="Self.FK_ClientContract_Contract">
+      <End Role="Contract" EntitySet="Contract" />
+      <End Role="ClientContract" EntitySet="ClientContract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientContract_ModemService" Association="Self.FK_ClientContract_ModemService">
+      <End Role="ModemService" EntitySet="ModemService" />
+      <End Role="ClientContract" EntitySet="ClientContract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Contract_Tower" Association="Self.FK_Contract_Tower">
+      <End Role="Tower" EntitySet="Tower" />
+      <End Role="Contract" EntitySet="Contract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Contract_Worker" Association="Self.FK_Contract_Worker">
+      <End Role="Worker" EntitySet="Worker" />
+      <End Role="Contract" EntitySet="Contract" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Payment_Contract" Association="Self.FK_Payment_Contract">
+      <End Role="Contract" EntitySet="Contract" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Modem_Type" Association="Self.FK_Modem_Type">
+      <End Role="Type" EntitySet="Type" />
+      <End Role="Modem" EntitySet="Modem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModemService_Modem" Association="Self.FK_ModemService_Modem">
+      <End Role="Modem" EntitySet="Modem" />
+      <End Role="ModemService" EntitySet="ModemService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModemService_Service" Association="Self.FK_ModemService_Service">
+      <End Role="Service" EntitySet="Service" />
+      <End Role="ModemService" EntitySet="ModemService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModemService_Status" Association="Self.FK_ModemService_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="ModemService" EntitySet="ModemService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Worker_Role" Association="Self.FK_Worker_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Worker" EntitySet="Worker" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Service_Type" Association="Self.FK_Service_Type">
+      <End Role="Type" EntitySet="Type" />
+      <End Role="Service" EntitySet="Service" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
